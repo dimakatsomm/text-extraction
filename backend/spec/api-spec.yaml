@@ -1,0 +1,75 @@
+openapi: 3.0.1
+info:
+  title: File Upload and Text Extraction API
+  description: An API for uploading a file, extracting text, and calculating user age.
+  version: 1.0.0
+paths:
+  /api/upload:
+    post:
+      summary: Upload a file, extract text, and calculate age
+      description: Accepts a file, user's first name, last name, and date of birth. Extracts text from the file and calculates the user's age based on the date of birth.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  description: User's first name
+                  example: John
+                lastName:
+                  type: string
+                  description: User's last name
+                  example: Doe
+                dateOfBirth:
+                  type: string
+                  format: date
+                  description: User's date of birth (YYYY-MM-DD format)
+                  example: 1990-01-01
+                file:
+                  type: string
+                  format: binary
+                  description: The file to be uploaded (PDF or image)
+
+      responses:
+        '200':
+          description: Successfully processed the file
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fullName:
+                    type: string
+                    description: The full name of the user
+                    example: John Doe
+                  age:
+                    type: integer
+                    description: The user's calculated age
+                    example: 30
+                  extractedText:
+                    type: string
+                    description: Text extracted from the uploaded file
+                    example: "This is the extracted text from the file."
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "File is required"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Error processing file"
